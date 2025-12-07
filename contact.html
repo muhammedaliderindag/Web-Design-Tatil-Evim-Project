@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>İletişim - Tatil Evim</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="img/favicon.ico" rel="icon">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Ana Renkler - Yeni Yeşil Tema */
+            --primary: #00A780;
+            --primary-dark: #008f6d;
+            --secondary: #FF6922;
+            --dark: #06392D;
+            --light: #F0FDF9;
+            --radius: 12px;
+            --card-radius: 20px;
+
+            /* Bootstrap Renklerini Ezmek İçin Değişkenler */
+            --bs-primary: #00A780;
+            --bs-primary-rgb: 0, 167, 128;
+            --bs-link-color: #00A780;
+            --bs-link-hover-color: #008f6d;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #fff;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* --- BOOTSTRAP OVERRIDES (MAVİYİ YOK ETMEK İÇİN) --- */
+        .text-primary { color: var(--primary) !important; }
+        .bg-primary { background-color: var(--primary) !important; }
+        .border-primary { border-color: var(--primary) !important; }
+        
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark) !important;
+            border-color: var(--primary-dark) !important;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary) !important;
+            color: #fff !important;
+        }
+
+        /* --- ORTAK GENİŞ KONTEYNER --- */
+        .custom-wide-container {
+            width: 92%;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+/* 1. NAVBAR (GÜNCELLENMİŞ) */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .navbar-brand h1 { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            letter-spacing: -0.5px; 
+            margin: 0; 
+        }
+        
+        /* Navbar Linkleri ve Animasyon */
+        .navbar-nav .nav-link { 
+            color: var(--dark) !important; 
+            font-weight: 600; 
+            font-size: 1rem; 
+            margin-left: 25px; 
+            transition: 0.3s; 
+            position: relative; /* Animasyon için referans noktası */
+        }
+        
+        /* Alt Çizgi Animasyonu (::after) */
+        .navbar-nav .nav-link::after {
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 2px; 
+            bottom: 5px; 
+            left: 0; 
+            background: var(--primary); 
+            transition: 0.3s;
+        }
+        
+        /* Hover ve Active durumunda çizgi uzasın */
+        .navbar-nav .nav-link:hover::after, 
+        .navbar-nav .nav-link.active::after { 
+            width: 100%; 
+        }
+        
+        /* Link üzerine gelince renk değişimi */
+        .navbar-nav .nav-link:hover, 
+        .navbar-nav .nav-link.active { 
+            color: var(--primary) !important; 
+        }
+
+        /* Dropdown Menü Kutusu */
+        .dropdown-menu { 
+            border: none; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+            padding: 15px; 
+            margin-top: 15px; 
+            animation: fadeInUp 0.3s; /* Açılma efekti */
+        }
+
+        /* Dropdown İçindeki Linklerin Renk Ayarı (Maviyi yok etme) */
+        .dropdown-item:active, 
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: var(--primary) !important; /* Yeşil Arkaplan */
+            color: #fff !important; /* Beyaz Yazı */
+        }
+        /* 2. HEADER (GÜNCELLENDİ: Yeşil Gradient) */
+        .page-header {
+            padding: 120px 0;
+            /* Yeni Tema Gradienti */
+            background: linear-gradient(135deg, var(--dark) 0%, #00A780 100%);
+            color: white;
+            margin-bottom: 50px;
+            border-radius: 0 0 50px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dekoratif Arka Plan Şekilleri */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        /* İçeriğin şekillerin üzerinde kalması için */
+        .page-header .custom-wide-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .breadcrumb-item a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 600; }
+        .breadcrumb-item a:hover { color: #fff; }
+        .breadcrumb-item.active { color: #fff; opacity: 0.7; }
+        .breadcrumb-item + .breadcrumb-item::before { color: rgba(255,255,255,0.5); }
+
+        /* 3. İLETİŞİM KARTLARI */
+        .info-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: var(--card-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+            border: 1px solid #eee;
+        }
+        /* Gölge rengi yeni temaya uyarlandı */
+        .info-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0, 167, 128, 0.15); border-color: var(--primary); }
+        
+        .icon-box {
+            width: 70px; height: 70px;
+            background: rgba(0, 167, 128, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            transition: 0.3s;
+        }
+        .info-card:hover .icon-box { background: var(--primary); color: #fff; }
+        .info-title { font-weight: 800; margin-bottom: 10px; font-size: 1.2rem; }
+        .info-text { color: #666; margin-bottom: 0; }
+
+        /* 4. FORM ALANI */
+        .contact-form-wrapper {
+            background: #fff;
+            border-radius: var(--card-radius);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact-form-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 5px; height: 100%;
+            background: var(--primary);
+        }
+        
+        .form-control-custom {
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            background-color: #f8f9fa;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .form-control-custom:focus {
+            background-color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 167, 128, 0.1);
+        }
+        
+        .btn-send {
+            background: var(--dark);
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-send:hover { background: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* 5. HARİTA */
+        .map-frame {
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: 450px;
+            width: 100%;
+        }
+
+        /* Footer */
+        .footer { background-color: var(--dark); margin-top: auto; }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid px-5">
+            <a href="index.html" class="navbar-brand d-flex align-items-center">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 45px; height: 45px;">
+                    <i class="fa fa-umbrella-beach fs-4"></i>
+                </div>
+                <h1 class="m-0 fs-2">Tatil Evim</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto align-items-center">
+                    <a href="index.html" class="nav-item nav-link">Ana Sayfa</a>
+                    <a href="about.html" class="nav-item nav-link">Hakkımızda</a>
+                    <a href="misyon-vizyon.html" class="nav-item nav-link">Misyon</a>
+                    <!-- OK İŞARETİ EKLENDİ -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link" data-bs-toggle="dropdown">Tatil Evlerimiz <i class="fa fa-chevron-down small ms-1"></i></a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="villalar.html" class="dropdown-item">Özel Villalar</a>
+                            <a href="bungalovlar.html" class="dropdown-item">Doğa Bungalovları</a>
+                            <a href="apartlar.html" class="dropdown-item">Apart Daireler</a>
+                        </div>
+                    </div>
+                    <!-- /OK İŞARETİ -->
+                    <a href="duyurular.html" class="nav-item nav-link">Kampanyalar</a>
+                    <a href="contact.html" class="nav-item nav-link active">İletişim</a>
+                    <a href="admin.html" class="nav-item nav-link text-danger fw-bold ms-4">Yönetim</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+        <div class="custom-wide-container">
+            <div class="row align-items-center">
+                <div class="col-12 animated slideInLeft">
+                    <h1 class="display-3 fw-bold mb-3">Bize Ulaşın</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="index.html">Ana Sayfa</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">İletişim</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-wide-container py-5">
+        <div class="row g-4 mb-5">
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="info-card">
+                    <div class="icon-box"><i class="fa fa-map-marker-alt"></i></div>
+                    <h5 class="info-title">Adresimiz</h5>
+                    <p class="info-text">Umuttepe Kampüsü<br>Kocaeli, Türkiye</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="info-card">
+                    <div class="icon-box"><i class="fa fa-phone-alt"></i></div>
+                    <h5 class="info-title">Bizi Arayın</h5>
+                    <p class="info-text">+90 532 000 00 00<br>+90 262 000 00 00</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="info-card">
+                    <div class="icon-box"><i class="fa fa-envelope"></i></div>
+                    <h5 class="info-title">E-Posta Gönderin</h5>
+                    <p class="info-text">info@tatilevim.com<br>destek@tatilevim.com</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-lg-6 wow slideInLeft" data-wow-delay="0.1s">
+                <div class="contact-form-wrapper">
+                    <div class="mb-4">
+                        <h2 class="fw-bold text-dark">Mesaj Gönderin</h2>
+                        <p class="text-muted">Tatil planlarınız, önerileriniz veya şikayetleriniz için aşağıdaki formu doldurarak bize ulaşabilirsiniz.</p>
+                    </div>
+                    <form id="iletisimFormu">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control form-control-custom" id="name" placeholder="Adınız Soyadınız" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="email" class="form-control form-control-custom" id="email" placeholder="E-posta Adresiniz" required>
+                            </div>
+                            <div class="col-12">
+                                <select class="form-select form-control-custom" id="subject">
+                                    <option value="Genel Bilgi">Konu Seçiniz: Genel Bilgi</option>
+                                    <option value="Rezervasyon">Rezervasyon İşlemleri</option>
+                                    <option value="Öneri">Öneri ve İstek</option>
+                                    <option value="Şikayet">Şikayet Bildirimi</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <textarea class="form-control form-control-custom" placeholder="Mesajınız..." id="message" style="height: 150px" required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn-send w-100" type="submit">Mesajı Gönder <i class="fa fa-paper-plane ms-2"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-6 wow slideInRight" data-wow-delay="0.1s">
+<div class="map-frame">
+    <iframe class="w-100 h-100 border-0"
+        src="https://maps.google.com/maps?q=Kocaeli+%C3%9Cniversitesi+Teknoloji+Fak%C3%BCltesi&t=&z=15&ie=UTF8&iwloc=&output=embed"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="custom-wide-container py-5">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-4">Tatil Evim</h5>
+                    <p>Hayallerinizdeki tatili gerçeğe dönüştürmek için Ege ve Akdeniz'in en özel villalarını, bungalovlarını ve apartlarını sizlerle buluşturuyoruz.</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-4">Hızlı Erişim</h5>
+                    <a class="btn btn-link text-white-50" href="index.html">Ana Sayfa</a>
+                    <a class="btn btn-link text-white-50" href="about.html">Hakkımızda</a>
+                    <a class="btn btn-link text-white-50" href="villalar.html">Villalar</a>
+                    <a class="btn btn-link text-white-50" href="duyurular.html">Kampanyalar</a>
+                    <a class="btn btn-link text-white-50" href="contact.html">İletişim</a>
+                    <a class="btn btn-link text-white-50" href="admin.html">Yönetim Paneli</a>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-4">İletişim Bilgileri</h5>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Kocaeli Üniversitesi, Teknoloji Fakültesi</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+90 532 000 00 00</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@tatilevim.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="custom-wide-container">
+            <div class="copyright text-center py-4 border-top border-secondary">
+                &copy; <a class="border-bottom" href="index.html">Tatil Evim</a>, Tüm Hakları Saklıdır.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        // Scroll Animation
+        function setupScrollReveal() {
+            const reveals = document.querySelectorAll('.wow');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('animated', 'fadeInUp');
+                    }
+                });
+            }, { threshold: 0.1 });
+            reveals.forEach(reveal => observer.observe(reveal));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setupScrollReveal();
+
+            document.getElementById('iletisimFormu').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const yeniMesaj = {
+                    id: Date.now(),
+                    gonderen: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    konu: document.getElementById('subject').value,
+                    mesaj: document.getElementById('message').value,
+                    tarih: new Date().toLocaleDateString('tr-TR') + ' ' + new Date().toLocaleTimeString('tr-TR')
+                };
+
+                let mesajlar = JSON.parse(localStorage.getItem('mesajlar')) || [];
+                mesajlar.push(yeniMesaj);
+                localStorage.setItem('mesajlar', JSON.stringify(mesajlar));
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Mesajınız İletildi',
+                    text: 'Ekibimiz en kısa sürede size dönüş yapacaktır.',
+                    confirmButtonColor: '#00A780' // Yeni yeşil renk
+                });
+
+                document.getElementById('iletisimFormu').reset();
+            });
+        });
+    </script>
+</body>
+</html>

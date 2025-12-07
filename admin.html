@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>TatilEvim - Yönetici Paneli</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+--primary: #4f46e5;
+--primary-dark: #3730a3;
+--primary-light: #eef2ff;
+--bg-body: #f8fafc;
+--surface: #ffffff;
+--radius: 16px;
+--shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+body {
+font-family: 'Inter', sans-serif;
+background-color: var(--bg-body);
+color: #334155;
+overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; color: #0f172a; }
+
+/* --- LAYOUT --- */
+.app-container { display: flex; min-height: 100vh; padding: 20px; gap: 24px; }
+
+/* Sidebar */
+.sidebar {
+width: 260px;
+background: var(--surface);
+border-radius: var(--radius);
+padding: 24px;
+display: flex;
+flex-direction: column;
+position: sticky;
+top: 20px;
+height: calc(100vh - 40px);
+box-shadow: var(--shadow);
+flex-shrink: 0;
+border: 1px solid #f1f5f9;
+}
+
+.brand {
+font-family: 'Poppins', sans-serif;
+font-size: 1.4rem;
+font-weight: 700;
+color: var(--primary);
+margin-bottom: 32px;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.nav-pills { flex-direction: column; gap: 8px; width: 100%; }
+.nav-pills .nav-link {
+color: #64748b;
+font-weight: 500;
+padding: 12px 16px;
+border-radius: 10px;
+transition: all 0.2s ease;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.nav-pills .nav-link:hover { background-color: var(--primary-light); color: var(--primary); }
+.nav-pills .nav-link.active {
+background-color: var(--primary);
+color: white;
+box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+.main-content { flex: 1; display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+
+.card {
+background: var(--surface);
+border: 1px solid #f1f5f9;
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+padding: 24px;
+}
+.card-header {
+background: transparent;
+border-bottom: 1px solid #f1f5f9;
+padding: 0 0 16px 0;
+font-family: 'Poppins', sans-serif;
+font-weight: 600;
+color: #1e293b;
+margin-bottom: 16px;
+}
+
+.stat-card {
+background: var(--surface);
+border-radius: var(--radius);
+padding: 24px;
+box-shadow: var(--shadow);
+display: flex;
+align-items: center;
+justify-content: space-between;
+border: 1px solid #e2e8f0;
+transition: transform 0.2s;
+}
+.stat-card:hover { transform: translateY(-3px); }
+
+.stat-icon { width: 54px; height: 54px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.icon-bg-success { background-color: rgba(25, 135, 84, 0.1) !important; color: #198754 !important; }
+.icon-bg-danger { background-color: rgba(220, 53, 69, 0.1) !important; color: #dc3545 !important; }
+.icon-bg-warning { background-color: rgba(255, 193, 7, 0.1) !important; color: #ffc107 !important; }
+.icon-bg-white { background-color: rgba(255, 255, 255, 0.2) !important; color: #ffffff !important; }
+.stat-icon svg { width: 28px; height: 28px; stroke-width: 2.5; }
+.stat-info p { margin: 0; color: #64748b; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-info h3 { margin: 4px 0 0 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
+
+.table { border-collapse: separate; border-spacing: 0 8px; margin-top: -10px; }
+.table thead th { border: none; text-transform: uppercase; font-size: 0.75rem; color: #94a3b8; font-weight: 600; padding: 0 16px 10px 16px; }
+.table tbody tr { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.1s; }
+.table tbody tr:hover { transform: scale(1.01); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.table td { border: none; padding: 16px; vertical-align: middle; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+.table td:first-child { border-left: 1px solid #f1f5f9; border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+.table td:last-child { border-right: 1px solid #f1f5f9; border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+
+.form-control, .form-select { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; font-size: 0.95rem; color: #1e293b; }
+.form-control:focus, .form-select:focus { background-color: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+
+.feature-toggle-card { background-color: #fff; border: 1px solid #e2e8f0; border-left: 5px solid #f59e0b; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+.btn { padding: 10px 20px; border-radius: 10px; font-weight: 500; }
+.btn-primary { background-color: var(--primary); border: none; }
+.btn-primary:hover { background-color: var(--primary-dark); }
+
+/* Resim Önizleme Alanı */
+.preview-container {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 10px;
+max-height: 300px;
+overflow-y: auto;
+}
+.preview-item {
+position: relative;
+border-radius: 8px;
+overflow: hidden;
+border: 1px solid #e2e8f0;
+aspect-ratio: 4/3;
+}
+.preview-item img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+.cover-badge {
+position: absolute;
+top: 5px;
+left: 5px;
+background: rgba(0, 185, 142, 0.9);
+color: white;
+font-size: 0.65rem;
+padding: 2px 6px;
+border-radius: 4px;
+font-weight: bold;
+z-index: 2;
+}
+
+/* --- RESPONSIVE DÜZENLEMELER --- */
+@media (max-width: 991px) {
+.app-container {
+flex-direction: column;
+padding: 10px;
+}
+.sidebar {
+width: 100%;
+height: auto;
+position: static;
+flex-direction: column;
+align-items: stretch;
+padding: 15px;
+gap: 15px;
+}
+.sidebar .brand {
+margin: 0;
+justify-content: space-between;
+}
+/* Menüyü yatay ve kaydırılabilir yap */
+.nav-pills {
+display: flex; /* Görünür yap */
+flex-direction: row;
+overflow-x: auto;
+white-space: nowrap;
+padding-bottom: 5px;
+gap: 10px;
+}
+.nav-pills .nav-link {
+flex-shrink: 0;
+background-color: #fff;
+border: 1px solid #e2e8f0;
+font-size: 0.9rem;
+padding: 8px 15px;
+}
+/* Üst barın sıkışmasını engelle */
+.top-bar {
+flex-wrap: wrap;
+gap: 10px;
+}
+.card-header {
+flex-wrap: wrap;
+gap: 10px;
+}
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+<aside class="sidebar">
+    <div class="brand">
+        <i class="fa-solid fa-umbrella-beach"></i>
+        <span>TatilEvim</span>
+    </div>
+    
+    <div class="nav flex-column nav-pills" id="adminTabs" role="tablist">
+        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-ilanlar"><i class="fa fa-home me-2"></i> İlanlar</button>
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-rezervasyonlar"><i class="fa fa-calendar-check me-2"></i> Rezervasyonlar</button>
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-kuponlar"><i class="fa fa-ticket-alt me-2"></i> Kuponlar</button>
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-finans"><i class="fa fa-chart-pie me-2"></i> Finans</button>
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-duyurular"><i class="fa fa-bullhorn me-2"></i> Kampanyalar</button>
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-mesajlar"><i class="fa fa-envelope me-2"></i> Mesajlar</button>
+    </div>
+
+    <div class="mt-auto">
+        <button onclick="verileriSifirla()" class="btn btn-outline-danger btn-sm w-100"><i class="fa fa-sign-out-alt me-2"></i>Çıkış & Sıfırla</button>
+    </div>
+</aside>
+
+<main class="main-content">
+    
+    <header class="top-bar">
+        <h4 class="m-0 fw-bold">Yönetim Paneli</h4>
+        <a href="index.html" class="btn btn-white bg-white border text-dark shadow-sm"><i class="fa fa-external-link-alt me-2"></i>Siteyi Görüntüle</a>
+    </header>
+
+    <div class="row g-4">
+        <div class="col-sm-6 col-xl-3"><div class="stat-card"><div class="stat-info"><p>Toplam Gelir</p><h3 id="statGelir" class="text-success">0 ₺</h3></div><div class="stat-icon icon-bg-success"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg></div></div></div>
+        <div class="col-sm-6 col-xl-3"><div class="stat-card"><div class="stat-info"><p>Toplam Gider</p><h3 id="statGider" class="text-danger">0 ₺</h3></div><div class="stat-icon icon-bg-danger"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div></div></div>
+        <div class="col-sm-6 col-xl-3"><div class="stat-card text-white" id="cardNetDurum" style="background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%); border:none;"><div class="stat-info"><p class="text-white-50" style="color: rgba(255,255,255,0.7)!important;">Net Kasa</p><h3 id="statNet" class="text-white">0 ₺</h3></div><div class="stat-icon icon-bg-white"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div></div></div>
+        <div class="col-sm-6 col-xl-3"><div class="stat-card"><div class="stat-info"><p>Bekleyen</p><h3 id="statRez" class="text-warning">0</h3></div><div class="stat-icon icon-bg-warning"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div></div></div>
+    </div>
+
+    <div class="tab-content">
+        
+        <div class="tab-pane fade show active" id="tab-ilanlar">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between">
+                            <span id="formBaslik">Yeni İlan Ekle</span>
+                            <button type="button" class="btn btn-sm btn-light text-muted d-none" id="iptalBtn" onclick="formuSifirla()">İptal</button>
+                        </div>
+                        <form id="ilanForm">
+                            <input type="hidden" id="ilanId">
+                            
+                            <!-- ÇOKLU RESİM YÜKLEME ALANI -->
+                            <div class="mb-3">
+                                <div class="border rounded p-3 bg-light text-center">
+                                    <label class="btn btn-sm btn-outline-primary w-100 mb-2">
+                                        <i class="fa fa-images me-2"></i>Fotoğrafları Seç (Çoklu)
+                                        <input type="file" id="ilanResimDosya" class="d-none" accept="image/*" multiple onchange="resimOnizle(this)">
+                                    </label>
+                                    <small class="text-muted d-block" style="font-size: 11px;">İlk seçilen/görünen fotoğraf <strong>Kapak Fotoğrafı</strong> olacaktır.</small>
+                                </div>
+                                <!-- ÖNİZLEME ALANI -->
+                                <div id="onizlemeAlani" class="preview-container mt-2">
+                                    <div class="text-center text-muted small w-100 py-4" style="grid-column: span 3;">Henüz resim seçilmedi.</div>
+                                </div>
+                                <!-- Eski veriyi tutmak için hidden input -->
+                                <input type="hidden" id="ilanResimData"> 
+                            </div>
+
+                            <div class="mb-3"><label class="text-muted small">Başlık</label><input type="text" id="ilanBaslik" class="form-control" placeholder="Örn: Deniz Kenarı Villa" required></div>
+                            <div class="feature-toggle-card p-3 rounded-3 mb-3 d-flex align-items-center"><div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" id="ilanOneCikan" style="width: 2.5em; height: 1.25em; cursor: pointer;"></div><label class="form-check-label ms-3 fw-bold text-dark" for="ilanOneCikan" style="cursor: pointer; user-select: none;">Fırsat İlanı Olarak İşaretle</label></div>
+                            <div class="row g-2 mb-3"><div class="col-6"><label class="text-muted small">Fiyat (₺)</label><input type="number" id="ilanFiyat" class="form-control" placeholder="Örn: 5000" required></div><div class="col-6"><label class="text-muted small">Kapasite</label><input type="number" id="ilanKapasite" class="form-control" placeholder="Örn: 4" required></div></div>
+                            
+                            <!-- YENİ BÖLGE SEÇİMİ (DATALIST) -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="text-muted small">Tür</label>
+                                    <select id="ilanTur" class="form-select"><option>Villa</option><option>Bungalov</option><option>Apart</option></select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="text-muted small">Bölge</label>
+                                    <!-- Select yerine Input + Datalist -->
+                                    <input class="form-control" list="bolgeOptions" id="ilanBolge" placeholder="Seç veya Yaz..." required>
+                                    <datalist id="bolgeOptions">
+                                        <option value="Bodrum">
+                                        <option value="Fethiye">
+                                        <option value="Kaş">
+                                        <option value="Marmaris">
+                                        <option value="Antalya">
+                                        <option value="Sapanca">
+                                        <option value="Kalkan">
+                                        <option value="Datça">
+                                    </datalist>
+                                </div>
+                            </div>
+                            <!-- /YENİ BÖLGE SEÇİMİ -->
+
+                            <div class="row g-2 mb-3"><div class="col-6"><input type="number" id="ilanYatak" class="form-control" value="2" placeholder="Yatak"></div><div class="col-6"><input type="number" id="ilanBanyo" class="form-control" value="1" placeholder="Banyo"></div></div>
+                            
+                            <!-- GÜNCELLENEN ÖZELLİKLER ALANI -->
+                            <div class="mb-3">
+                                <label class="text-muted small mb-1">Özellikler</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <input type="checkbox" class="btn-check" id="ozellikWifi"><label class="btn btn-outline-secondary btn-sm" for="ozellikWifi"><i class="fa fa-wifi me-1"></i>Wifi</label>
+                                    <input type="checkbox" class="btn-check" id="ozellikKlima"><label class="btn btn-outline-secondary btn-sm" for="ozellikKlima"><i class="fa fa-snowflake me-1"></i>Klima</label>
+                                    <input type="checkbox" class="btn-check" id="ozellikHavuz"><label class="btn btn-outline-secondary btn-sm" for="ozellikHavuz"><i class="fa fa-swimming-pool me-1"></i>Havuz</label>
+                                    <input type="checkbox" class="btn-check" id="ozellikTV"><label class="btn btn-outline-secondary btn-sm" for="ozellikTV"><i class="fa fa-tv me-1"></i>TV</label>
+                                    <input type="checkbox" class="btn-check" id="ozellikOtopark"><label class="btn btn-outline-secondary btn-sm" for="ozellikOtopark"><i class="fa fa-parking me-1"></i>Otopark</label>
+                                    <input type="checkbox" class="btn-check" id="ozellikMutfak"><label class="btn btn-outline-secondary btn-sm" for="ozellikMutfak"><i class="fa fa-utensils me-1"></i>Mutfak</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3"><textarea id="ilanAciklama" class="form-control" rows="2" placeholder="İlan açıklaması..."></textarea></div>
+                            <button type="submit" class="btn btn-primary w-100" id="kaydetBtn">İlanı Yayınla</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card h-100">
+                        <div class="card-header">Aktif İlan Listesi</div>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead><tr><th>Görsel</th><th>İlan Detayı</th><th>Fiyat</th><th class="text-end">İşlemler</th></tr></thead>
+                                <tbody id="ilanTablosu"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-rezervasyonlar">
+            <div class="card"><div class="card-header d-flex justify-content-between align-items-center"><span>Rezervasyon Talepleri</span><button onclick="rezervasyonlariTemizle()" class="btn btn-sm btn-light text-danger"><i class="fa fa-trash me-1"></i>Temizle</button></div><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Tarih</th><th>Müşteri</th><th>Ev</th><th>Giriş/Çıkış</th><th>Tutar</th><th>Durum</th><th class="text-end">İşlem</th></tr></thead><tbody id="rezervasyonTablosu"></tbody></table></div></div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-kuponlar">
+            <div class="row g-4"><div class="col-lg-4"><div class="card bg-dark text-white" style="background: #1e293b;"><div class="card-header text-white border-secondary">Kupon Oluştur</div><form id="kuponForm"><div class="mb-3"><input type="text" id="kuponKodu" class="form-control" placeholder="KOD (ÖRN: YAZ20)" required style="text-transform:uppercase;"></div><div class="row g-2 mb-3"><div class="col-6"><select id="kuponTur" class="form-select"><option value="yuzde">% Yüzde</option><option value="sabit">TL Tutar</option></select></div><div class="col-6"><input type="number" id="kuponDeger" class="form-control" placeholder="Değer (Örn: 20)" required></div></div><div class="row g-2 mb-3"><div class="col-6"><input type="number" id="kuponMinGun" class="form-control" value="1" placeholder="Min Gün"></div><div class="col-6"><input type="number" id="kuponLimit" class="form-control" value="100" placeholder="Limit"></div></div><button type="submit" class="btn btn-info w-100 fw-bold">Oluştur</button></form></div></div><div class="col-lg-8"><div class="card h-100"><div class="card-header">Kuponlar</div><table class="table align-middle"><thead><tr><th>Kod</th><th>İndirim</th><th>Kullanım</th><th class="text-end">Sil</th></tr></thead><tbody id="kuponTablosu"></tbody></table></div></div></div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-finans">
+            <div class="row g-4"><div class="col-lg-4"><div class="card mb-4 border-start border-4 border-danger"><div class="card-header text-danger">Gider Ekle</div><form id="giderForm"><div class="mb-3"><input type="text" id="giderAciklama" class="form-control" placeholder="Örn: Elektrik Faturası" required></div><div class="mb-3"><input type="number" id="giderTutar" class="form-control" placeholder="Tutar (TL)" required></div><button type="submit" class="btn btn-danger w-100">Kaydet</button></form></div><div class="card"><div class="card-header">Dağılım</div><div class="p-3"><canvas id="finansChart"></canvas></div></div></div><div class="col-lg-8"><div class="card mb-4"><div class="card-header">Yıllık Analiz</div><div class="p-3"><canvas id="aylikChart" style="max-height: 250px;"></canvas></div></div><div class="card"><div class="card-header">Son İşlemler</div><div class="table-responsive" style="max-height:300px; overflow-y:auto;"><table class="table align-middle mb-0"><thead><tr><th>Tarih</th><th>Tür</th><th>Açıklama</th><th>Tutar</th><th class="text-end">Sil</th></tr></thead><tbody id="finansTablosu"></tbody></table></div></div></div></div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-duyurular">
+             <div class="row g-4"><div class="col-lg-4"><div class="card border-start border-4 border-success"><div class="card-header text-success">Kampanya Yayınla</div><form id="duyuruForm" class="p-3"><div class="mb-2"><input type="text" id="duyuruBaslik" class="form-control" placeholder="Başlık" required></div><div class="mb-2"><input type="text" id="duyuruKisa" class="form-control" placeholder="Özet" required></div><div class="mb-2"><textarea id="duyuruIcerik" class="form-control" placeholder="İçerik" required></textarea></div><div class="mb-3"><input type="file" id="duyuruDosya" class="form-control"></div><button class="btn btn-success w-100">Yayınla</button></form></div></div><div class="col-lg-8"><div class="card h-100"><div class="card-header">Yayındaki Kampanyalar</div><table class="table align-middle"><thead><tr><th>Tarih</th><th>Başlık</th><th class="text-end">Sil</th></tr></thead><tbody id="duyuruTablosu"></tbody></table></div></div></div>
+        </div>
+        
+        <div class="tab-pane fade" id="tab-mesajlar"><div class="card"><div class="card-header d-flex justify-content-between"><span>Gelen Kutusu</span><button onclick="mesajlariTemizle()" class="btn btn-sm btn-light text-danger">Temizle</button></div><ul id="mesajListesi" class="list-group list-group-flush rounded-3"></ul></div></div>
+    </div>
+</main>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// --- JS AYARLARI ---
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = 'rgba(0,0,0,0.03)';
+let myChart=null; let lineChart=null;
+
+document.addEventListener('DOMContentLoaded', () => {
+bolgeleriYukle(); // Sayfa açılınca bölgeleri yükle
+listeleriGuncelle();
+finansGuncelle();
+updateStats();
+});
+
+// --- BÖLGE YÖNETİMİ (Yeni) ---
+function bolgeleriYukle() {
+// Varsayılan bölgeler
+const varsayilanBolgeler = ["Bodrum", "Fethiye", "Kaş", "Marmaris", "Antalya", "Sapanca", "Kalkan"];
+
+// Kayıtlı ilanlardan gelen yeni bölgeleri bul
+const ilanlar = JSON.parse(localStorage.getItem('ilanlar')) || [];
+const kayitliBolgeler = ilanlar.map(i => i.bolge).filter(Boolean); // Boş olmayanları al
+
+// Hepsini birleştir ve tekrar edenleri temizle (Set kullanarak)
+const tumBolgeler = [...new Set([...varsayilanBolgeler, ...kayitliBolgeler])];
+
+// Datalist'i güncelle
+const datalist = document.getElementById('bolgeOptions');
+datalist.innerHTML = tumBolgeler.sort().map(b => `<option value="${b}">`).join('');
+}
+
+// --- RESİM İŞLEMLERİ ---
+function readFileAsBase64(file) {
+return new Promise((resolve, reject) => {
+const reader = new FileReader();
+reader.onload = () => resolve(reader.result);
+reader.onerror = error => reject(error);
+reader.readAsDataURL(file);
+});
+}
+
+async function resimOnizle(input) {
+const container = document.getElementById('onizlemeAlani');
+container.innerHTML = "";
+
+if (input.files && input.files.length > 0) {
+for (let i = 0; i < input.files.length; i++) {
+const file = input.files[i];
+try {
+const base64 = await readFileAsBase64(file);
+const isCover = (i === 0);
+container.innerHTML += `
+<div class="preview-item">
+<img src="${base64}">
+${isCover ? '<div class="cover-badge">Kapak Fotoğrafı</div>' : ''}
+</div>`;
+} catch (e) { console.error("Resim okunamadı", e); }
+}
+} else {
+container.innerHTML = `<div class="text-center text-muted small w-100 py-4" style="grid-column: span 3;">Henüz resim seçilmedi.</div>`;
+}
+}
+
+function resimYolunuGetir(resimString) {
+if (!resimString) return 'img/icon-deal.png';
+if (resimString.startsWith('data:image')) return resimString;
+return 'img/' + resimString;
+}
+
+// --- İLAN EKLEME (ÇOKLU RESİM DESTEKLİ) ---
+document.getElementById('ilanForm').addEventListener('submit', async function(e){
+e.preventDefault();
+
+const fileInput = document.getElementById('ilanResimDosya');
+let resimler = [];
+
+if (fileInput.files.length > 0) {
+for (let file of fileInput.files) {
+try {
+let base64 = await readFileAsBase64(file);
+resimler.push(base64);
+} catch(err) { Swal.fire('Hata','Resim yüklenemedi','error'); return; }
+}
+} else {
+const hiddenData = document.getElementById('ilanResimData').value;
+if(hiddenData) {
+try { resimler = JSON.parse(hiddenData); } catch(e) { resimler = [hiddenData]; }
+}
+}
+
+if (resimler.length === 0) resimler.push('property-1.jpg');
+
+const id = document.getElementById('ilanId').value;
+const data = {
+id: id ? parseInt(id) : Date.now(),
+baslik: document.getElementById('ilanBaslik').value,
+fiyat: document.getElementById('ilanFiyat').value,
+kapasite: document.getElementById('ilanKapasite').value,
+tur: document.getElementById('ilanTur').value,
+bolge: document.getElementById('ilanBolge').value, // Input değeri (select değil)
+yatak: document.getElementById('ilanYatak').value,
+banyo: document.getElementById('ilanBanyo').value,
+resimler: resimler,
+resim: resimler[0],
+oneCikan: document.getElementById('ilanOneCikan').checked,
+aciklama: document.getElementById('ilanAciklama').value,
+ozellikler: {
+wifi:document.getElementById('ozellikWifi').checked,
+klima:document.getElementById('ozellikKlima').checked,
+havuz:document.getElementById('ozellikHavuz').checked,
+tv:document.getElementById('ozellikTV').checked,
+otopark:document.getElementById('ozellikOtopark').checked,
+mutfak:document.getElementById('ozellikMutfak').checked
+}
+};
+
+let arr = JSON.parse(localStorage.getItem('ilanlar'))||[];
+if(id){ const idx=arr.findIndex(x=>x.id==id); if(idx>-1) arr[idx]=data; } else arr.push(data);
+
+try {
+localStorage.setItem('ilanlar', JSON.stringify(arr));
+formuSifirla();
+listeleriGuncelle();
+updateStats();
+bolgeleriYukle(); // Yeni bölge eklendiyse listeyi güncelle
+Swal.fire({title: 'Başarılı!', text: 'İlan kaydedildi.', icon: 'success', confirmButtonColor: '#4f46e5'});
+} catch (e) {
+Swal.fire('Hata', 'Depolama alanı doldu! Daha az veya küçük resim yükleyin.', 'error');
+}
+});
+
+function ilanDuzenle(id){
+const i = JSON.parse(localStorage.getItem('ilanlar')).find(x=>x.id==id);
+if(i){
+document.getElementById('ilanId').value=i.id;
+document.getElementById('ilanBaslik').value=i.baslik;
+document.getElementById('ilanFiyat').value=i.fiyat;
+document.getElementById('ilanKapasite').value=i.kapasite;
+document.getElementById('ilanTur').value=i.tur;
+document.getElementById('ilanBolge').value=i.bolge;
+document.getElementById('ilanYatak').value=i.yatak || 2;
+document.getElementById('ilanBanyo').value=i.banyo || 1;
+
+let imgs = i.resimler || [i.resim];
+document.getElementById('ilanResimData').value = JSON.stringify(imgs);
+
+const container = document.getElementById('onizlemeAlani');
+container.innerHTML = "";
+imgs.forEach((img, idx) => {
+container.innerHTML += `
+<div class="preview-item">
+<img src="${resimYolunuGetir(img)}">
+${idx === 0 ? '<div class="cover-badge">Kapak Fotoğrafı</div>' : ''}
+</div>`;
+});
+
+document.getElementById('ilanOneCikan').checked=i.oneCikan;
+document.getElementById('ilanAciklama').value=i.aciklama||"";
+if(i.ozellikler){
+document.getElementById('ozellikWifi').checked=i.ozellikler.wifi;
+document.getElementById('ozellikKlima').checked=i.ozellikler.klima;
+document.getElementById('ozellikHavuz').checked=i.ozellikler.havuz;
+document.getElementById('ozellikTV').checked = i.ozellikler.tv || false;
+document.getElementById('ozellikOtopark').checked = i.ozellikler.otopark || false;
+document.getElementById('ozellikMutfak').checked = i.ozellikler.mutfak || false;
+}
+document.getElementById('formBaslik').innerText="İlanı Düzenle";
+document.getElementById('kaydetBtn').innerText="Değişiklikleri Kaydet";
+document.getElementById('kaydetBtn').classList.replace('btn-primary','btn-warning');
+document.getElementById('iptalBtn').classList.remove('d-none');
+}
+}
+
+function formuSifirla(){
+document.getElementById('ilanForm').reset(); document.getElementById('ilanId').value="";
+document.getElementById('ilanResimData').value="";
+document.getElementById('onizlemeAlani').innerHTML='<div class="text-center text-muted small w-100 py-4" style="grid-column: span 3;">Henüz resim seçilmedi.</div>';
+document.getElementById('formBaslik').innerText="Yeni İlan Ekle";
+document.getElementById('kaydetBtn').innerText="İlanı Yayınla";
+document.getElementById('kaydetBtn').classList.replace('btn-warning','btn-primary');
+document.getElementById('iptalBtn').classList.add('d-none');
+}
+
+// --- LİSTELEME ---
+function listeleriGuncelle() {
+const il = JSON.parse(localStorage.getItem('ilanlar'))||[];
+document.getElementById('ilanTablosu').innerHTML = il.reverse().map(i => `<tr><td><div class="d-flex align-items-center"><img src="${resimYolunuGetir(i.resim)}" style="width:48px;height:48px;object-fit:cover;border-radius:10px;margin-right:15px;"><div class="d-none d-md-block"><h6 class="mb-0 fw-bold text-dark" style="font-size:0.95rem;">${i.baslik}</h6><small class="text-muted">${i.bolge}</small></div></div></td><td><span class="badge bg-light text-dark border">${i.tur}</span></td><td><h6 class="mb-0 text-primary fw-bold">${i.fiyat} ₺</h6></td><td class="text-end">${i.oneCikan?'<i class="fa fa-star text-warning me-2"></i>':''}<button onclick="ilanDuzenle(${i.id})" class="btn btn-sm btn-light text-primary me-1"><i class="fa fa-pen"></i></button><button onclick="sil('ilanlar',${i.id})" class="btn btn-sm btn-light text-danger"><i class="fa fa-trash"></i></button></td></tr>`).join('');
+
+const rez = JSON.parse(localStorage.getItem('rezervasyonlar')) || [];
+document.getElementById('rezervasyonTablosu').innerHTML = rez.reverse().map(r => `<tr><td class="text-muted small">${r.tarih}</td><td><div class="fw-bold text-dark">${r.musteriAd}</div><small class="text-muted">${r.musteriTel}</small></td><td>${r.ilanBaslik}</td><td><span class="badge bg-light text-secondary border">${r.giris}</span> <i class="fa fa-arrow-right small text-muted mx-1"></i> <span class="badge bg-light text-secondary border">${r.cikis}</span></td><td class="text-primary fw-bold">${r.odenecekTutar} ₺</td><td><span class="badge ${r.durum==='Onaylandı'?'bg-success':'bg-warning text-dark'}">${r.durum}</span></td><td class="text-end">${r.durum !== 'Onaylandı' ? `<button onclick="rezOnayla(${r.id}, ${r.odenecekTutar || 0}, '${r.ilanBaslik}')" class="btn btn-sm btn-success rounded-circle me-1" style="width:32px;height:32px;padding:0;" title="Onayla"><i class="fa fa-check"></i></button>` : ''}<button onclick="sil('rezervasyonlar', ${r.id})" class="btn btn-sm btn-light text-danger rounded-circle" style="width:32px;height:32px;padding:0;"><i class="fa fa-trash"></i></button></td></tr>`).join('');
+
+const kup = JSON.parse(localStorage.getItem('kuponlar'))||[]; document.getElementById('kuponTablosu').innerHTML = kup.reverse().map(k=>`<tr><td><span class="badge bg-primary bg-opacity-10 text-primary p-2" style="font-family:'Poppins'; letter-spacing:1px;">${k.kod}</span></td><td class="fw-bold">${k.deger} ${k.tur==='yuzde'?'%':'₺'}</td><td>${k.kullanilan}/${k.limit}</td><td class="text-end"><button onclick="sil('kuponlar',${k.id})" class="btn btn-sm btn-light text-danger"><i class="fa fa-times"></i></button></td></tr>`).join('');
+const du = JSON.parse(localStorage.getItem('duyurular'))||[]; document.getElementById('duyuruTablosu').innerHTML = du.reverse().map(d=>`<tr><td class="text-muted">${d.tarih}</td><td class="fw-bold">${d.baslik}</td><td class="text-end"><button onclick="sil('duyurular',${d.id})" class="btn btn-sm btn-light text-danger"><i class="fa fa-trash"></i></button></td></tr>`).join('');
+const ms = JSON.parse(localStorage.getItem('mesajlar'))||[]; document.getElementById('mesajListesi').innerHTML = ms.reverse().map(m=>`<li class="list-group-item d-flex justify-content-between align-items-center p-3 border-0 mb-2 shadow-sm rounded-3"><div><div class="fw-bold text-dark mb-1">${m.gonderen}</div><div class="text-muted small">${m.konu}</div></div><button onclick="sil('mesajlar',${m.id})" class="btn btn-sm btn-light text-danger rounded-circle"><i class="fa fa-times"></i></button></li>`).join('');
+}
+
+// --- DİĞER FONKSİYONLAR ---
+function finansGuncelle(){
+const f = JSON.parse(localStorage.getItem('finans'))||[];
+let gel=0, gid=0, aylar=new Array(12).fill(0);
+document.getElementById('finansTablosu').innerHTML = f.reverse().map(i=>{
+const renk = i.tur==='Gelir'?'text-success':'text-danger';
+const p = i.tarih.split('.');
+if(p.length===3) { const ayIdx = parseInt(p[1]) - 1; if(i.tur==='Gelir') { gel+=i.tutar; aylar[ayIdx]+=i.tutar; } else { gid+=i.tutar; aylar[ayIdx]-=i.tutar; } }
+return `<tr><td class="text-muted small">${i.tarih}</td><td><span class="badge ${i.tur==='Gelir'?'bg-success':'bg-danger'} bg-opacity-10 text-${i.tur==='Gelir'?'success':'danger'}">${i.tur}</span></td><td>${i.aciklama}</td><td class="fw-bold ${renk}">${i.tur==='Gelir'?'+':'-'}${i.tutar} ₺</td><td class="text-end"><button onclick="sil('finans', ${i.id}, true)" class="btn btn-sm btn-light text-muted"><i class="fa fa-times"></i></button></td></tr>`;
+}).join('');
+document.getElementById('statGelir').innerText = gel.toLocaleString('tr-TR') + " ₺"; document.getElementById('statGider').innerText = gid.toLocaleString('tr-TR') + " ₺";
+const net = gel - gid; const cardNet = document.getElementById('cardNetDurum'); if(net >= 0) { cardNet.style.background = "linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)"; document.getElementById('statNet').innerText = "+" + net.toLocaleString('tr-TR') + " ₺"; } else { cardNet.style.background = "linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)"; document.getElementById('statNet').innerText = net.toLocaleString('tr-TR') + " ₺"; }
+if(myChart) myChart.destroy(); myChart = new Chart(document.getElementById('finansChart'), { type:'doughnut', data:{labels:['Gelir','Gider'], datasets:[{data:[gel,gid], backgroundColor:['#10b981', '#f43f5e'], borderWidth: 0}]} });
+if(lineChart) lineChart.destroy(); lineChart = new Chart(document.getElementById('aylikChart'), { type:'bar', data:{labels:['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'], datasets:[{label:'Net Durum', data:aylar, backgroundColor:'#4f46e5', borderRadius: 4}]} });
+}
+function updateStats() { const r = JSON.parse(localStorage.getItem('rezervasyonlar'))||[]; document.getElementById('statRez').innerText = r.filter(x=>x.durum==='Beklemede').length; }
+document.getElementById('kuponForm').addEventListener('submit', function(e){ e.preventDefault(); let arr=JSON.parse(localStorage.getItem('kuponlar'))||[]; arr.push({id:Date.now(),kod:document.getElementById('kuponKodu').value.toUpperCase(), tur:document.getElementById('kuponTur').value, deger:parseFloat(document.getElementById('kuponDeger').value), minGun:parseInt(document.getElementById('kuponMinGun').value), limit:parseInt(document.getElementById('kuponLimit').value), kullanilan:0}); localStorage.setItem('kuponlar',JSON.stringify(arr)); document.getElementById('kuponForm').reset(); listeleriGuncelle(); updateStats(); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Kupon oluşturuldu', showConfirmButton:false, timer:1500}); });
+document.getElementById('giderForm').addEventListener('submit', function(e){ e.preventDefault(); let f=JSON.parse(localStorage.getItem('finans'))||[]; f.push({id:Date.now(),tur:'Gider',aciklama:document.getElementById('giderAciklama').value,tutar:parseFloat(document.getElementById('giderTutar').value),tarih:new Date().toLocaleDateString('tr-TR')}); localStorage.setItem('finans',JSON.stringify(f)); document.getElementById('giderForm').reset(); finansGuncelle(); Swal.fire({toast:true, position:'top-end', icon:'warning', title:'Gider eklendi', showConfirmButton:false, timer:1500}); });
+
+// --- GÜNCELLENEN KAMPANYA YAYINLAMA (DOSYA DESTEKLİ) ---
+document.getElementById('duyuruForm').addEventListener('submit', async function(e){
+e.preventDefault();
+
+// Dosya İşleme (Base64)
+let dosyaData = 'Yok';
+let dosyaAdi = 'Yok';
+const fileInput = document.getElementById('duyuruDosya');
+
+if(fileInput.files.length > 0) {
+try {
+dosyaData = await readFileAsBase64(fileInput.files[0]);
+dosyaAdi = fileInput.files[0].name;
+} catch(err) {
+Swal.fire('Hata', 'Dosya okunamadı', 'error'); return;
+}
+}
+
+let d = JSON.parse(localStorage.getItem('duyurular')) || [];
+d.push({
+id: Date.now(),
+baslik: document.getElementById('duyuruBaslik').value,
+kisa: document.getElementById('duyuruKisa').value,
+detay: document.getElementById('duyuruIcerik').value,
+dosya: dosyaData, // Artık dosyanın kendisi (base64)
+dosyaAdi: dosyaAdi, // Dosya ismini ayrıca saklıyoruz
+tarih: new Date().toLocaleDateString('tr-TR')
+});
+
+localStorage.setItem('duyurular', JSON.stringify(d));
+listeleriGuncelle();
+document.getElementById('duyuruForm').reset();
+Swal.fire('Yayınlandı', 'Kampanya yayına alındı', 'success');
+});
+
+function rezOnayla(id, tutar, baslik){ let r=JSON.parse(localStorage.getItem('rezervasyonlar')); const idx=r.findIndex(x=>x.id==id); r[idx].durum='Onaylandı'; localStorage.setItem('rezervasyonlar',JSON.stringify(r)); let f=JSON.parse(localStorage.getItem('finans'))||[]; f.push({id:Date.now(), tur:'Gelir', aciklama:'Rez: '+baslik, tutar:parseFloat(tutar), tarih:new Date().toLocaleDateString('tr-TR')}); localStorage.setItem('finans',JSON.stringify(f)); Swal.fire('Onaylandı','','success'); listeleriGuncelle(); finansGuncelle(); updateStats(); }
+function sil(k,id,fin=false){ Swal.fire({title: 'Emin misin?', text: "Bu işlem geri alınamaz!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#f43f5e', cancelButtonColor: '#94a3b8', confirmButtonText: 'Evet, Sil'}).then((result) => { if (result.isConfirmed) { let d=JSON.parse(localStorage.getItem(k)).filter(x=>x.id!==id); localStorage.setItem(k,JSON.stringify(d)); listeleriGuncelle(); if(fin)finansGuncelle(); updateStats(); } }) }
+function verileriSifirla(){ Swal.fire({title: 'Tüm Veriler Silinsin mi?', text: "Bütün kayıtlar kalıcı olarak silinecektir.", icon: 'question', showCancelButton: true, confirmButtonText: 'Evet, Sıfırla'}).then((result) => { if (result.isConfirmed) { localStorage.clear(); location.reload(); } }) }
+function mesajlariTemizle(){ localStorage.removeItem('mesajlar'); listeleriGuncelle(); }
+function rezervasyonlariTemizle(){ localStorage.removeItem('rezervasyonlar'); listeleriGuncelle(); updateStats(); }
+</script>
+</body>
+</html>

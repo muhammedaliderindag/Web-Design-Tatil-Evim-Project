@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>Kiralık Villalar - Tatil Evim</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+    <link href="img/favicon.ico" rel="icon">
+    
+    <!-- Modern Fontlar -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <!-- İkonlar -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Kütüphaneler -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Ana Renkler - Yeni Yeşil Tema */
+            --primary: #00A780;
+            --primary-dark: #008f6d;
+            --secondary: #FF6922;
+            --dark: #06392D;
+            --light: #F0FDF9;
+            --radius: 12px;
+            --card-radius: 20px;
+
+            /* Bootstrap Renklerini Ezmek İçin Değişkenler */
+            --bs-primary: #00A780;
+            --bs-primary-rgb: 0, 167, 128;
+            --bs-link-color: #00A780;
+            --bs-link-hover-color: #008f6d;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #fff;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* --- BOOTSTRAP OVERRIDES (MAVİYİ YOK ETMEK İÇİN) --- */
+        .text-primary { color: var(--primary) !important; }
+        .bg-primary { background-color: var(--primary) !important; }
+        .border-primary { border-color: var(--primary) !important; }
+        
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark) !important;
+            border-color: var(--primary-dark) !important;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary) !important;
+            color: #fff !important;
+        }
+
+        /* --- ORTAK GENİŞ KONTEYNER --- */
+        .custom-wide-container {
+            width: 92%;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+/* 1. NAVBAR (GÜNCELLENMİŞ) */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .navbar-brand h1 { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            letter-spacing: -0.5px; 
+            margin: 0; 
+        }
+        
+        /* Navbar Linkleri ve Animasyon */
+        .navbar-nav .nav-link { 
+            color: var(--dark) !important; 
+            font-weight: 600; 
+            font-size: 1rem; 
+            margin-left: 25px; 
+            transition: 0.3s; 
+            position: relative; /* Animasyon için referans noktası */
+        }
+        
+        /* Alt Çizgi Animasyonu (::after) */
+        .navbar-nav .nav-link::after {
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 2px; 
+            bottom: 5px; 
+            left: 0; 
+            background: var(--primary); 
+            transition: 0.3s;
+        }
+        
+        /* Hover ve Active durumunda çizgi uzasın */
+        .navbar-nav .nav-link:hover::after, 
+        .navbar-nav .nav-link.active::after { 
+            width: 100%; 
+        }
+        
+        /* Link üzerine gelince renk değişimi */
+        .navbar-nav .nav-link:hover, 
+        .navbar-nav .nav-link.active { 
+            color: var(--primary) !important; 
+        }
+
+        /* Dropdown Menü Kutusu */
+        .dropdown-menu { 
+            border: none; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+            padding: 15px; 
+            margin-top: 15px; 
+            animation: fadeInUp 0.3s; /* Açılma efekti */
+        }
+
+        /* Dropdown İçindeki Linklerin Renk Ayarı (Maviyi yok etme) */
+        .dropdown-item:active, 
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: var(--primary) !important; /* Yeşil Arkaplan */
+            color: #fff !important; /* Beyaz Yazı */
+        }
+        /* 2. HEADER (GÜNCELLENDİ: Yeşil Gradient) */
+        .page-header {
+            padding: 120px 0;
+            /* Yeni Tema Gradienti */
+            background: linear-gradient(135deg, var(--dark) 0%, #00A780 100%);
+            color: white;
+            margin-bottom: 50px;
+            border-radius: 0 0 50px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dekoratif Arka Plan Şekilleri */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        /* İçeriğin şekillerin üzerinde kalması için */
+        .page-header .custom-wide-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .breadcrumb-item a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 600; }
+        .breadcrumb-item a:hover { color: #fff; }
+        .breadcrumb-item.active { color: #fff; opacity: 0.7; }
+        .breadcrumb-item + .breadcrumb-item::before { color: rgba(255,255,255,0.5); }
+
+        /* 3. KARTLAR (BÜYÜK & MODERN) */
+        .property-item {
+            background: #fff;
+            border: none;
+            border-radius: var(--card-radius);
+            margin-bottom: 40px;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        .property-item:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
+        
+        .card-img-wrap { height: 400px; overflow: hidden; position: relative; }
+        .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .property-item:hover img { transform: scale(1.1); }
+        
+        .badge-overlay { position: absolute; top: 20px; left: 20px; z-index: 2; display: flex; gap: 10px; }
+        .badge-custom { background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); padding: 8px 16px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; color: var(--dark); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .fav-icon { position: absolute; top: 20px; right: 20px; z-index: 2; background: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ccc; transition: 0.3s; cursor: pointer; }
+        .fav-icon:hover { color: #ff4757; transform: scale(1.1); }
+
+        .card-content { padding: 25px; position: relative; }
+        .listing-title { font-size: 1.35rem; font-weight: 800; color: var(--dark); }
+        .listing-features { display: flex; gap: 15px; margin: 10px 0; font-size: 0.9rem; color: #666; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .feature-item i { color: var(--primary); margin-right: 5px; }
+        .listing-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 5px; }
+        .listing-price { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin: 0; }
+        .btn-detail { border: 2px solid var(--dark); background: transparent; color: var(--dark); border-radius: 30px; padding: 8px 20px; font-weight: 700; transition: 0.3s; }
+        .btn-detail:hover { background: var(--dark); color: white; }
+
+        /* Animasyon */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+
+<body>
+    <!-- 1. NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid px-5">
+            <a href="index.html" class="navbar-brand d-flex align-items-center">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 45px; height: 45px;">
+                    <i class="fa fa-umbrella-beach fs-4"></i>
+                </div>
+                <h1 class="m-0 fs-2">Tatil Evim</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto align-items-center">
+                    <a href="index.html" class="nav-item nav-link">Ana Sayfa</a>
+                    <a href="about.html" class="nav-item nav-link">Hakkımızda</a>
+                    <a href="misyon-vizyon.html" class="nav-item nav-link">Misyon</a>
+                    <!-- OK İŞARETİ EKLENDİ -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link" data-bs-toggle="dropdown">Tatil Evlerimiz <i class="fa fa-chevron-down small ms-1"></i></a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="villalar.html" class="dropdown-item">Özel Villalar</a>
+                            <a href="bungalovlar.html" class="dropdown-item">Doğa Bungalovları</a>
+                            <a href="apartlar.html" class="dropdown-item">Apart Daireler</a>
+                        </div>
+                    </div>
+                    <!-- /OK İŞARETİ -->
+                    <a href="duyurular.html" class="nav-item nav-link">Kampanyalar</a>
+                    <a href="contact.html" class="nav-item nav-link">İletişim</a>
+                    <a href="admin.html" class="nav-item nav-link text-danger fw-bold ms-4">Yönetim</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. HEADER -->
+    <div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+        <div class="custom-wide-container">
+            <div class="row align-items-center">
+                <div class="col-12 animated slideInLeft">
+                    <h1 class="display-3 fw-bold mb-3">Lüks Villalar</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="index.html">Ana Sayfa</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Villalar</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. VİLLA LİSTESİ -->
+    <div class="custom-wide-container py-5">
+        <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+            <h6 class="text-primary text-uppercase fw-bold mb-2">Konfor & Lüks</h6>
+            <h1 class="mb-3 display-6 fw-bold">Özel Havuzlu Villalar</h1>
+            <p class="text-muted fs-5">Size ve ailenize özel, izole ve konforlu bir tatil deneyimi için özenle seçilmiş portföyümüz.</p>
+        </div>
+        <div class="row g-4" id="villaListesi">
+            <!-- JS Burayı Dolduracak -->
+        </div>
+    </div>
+
+    <!-- 4. FOOTER (HİZALANMIŞ & STANDART) -->
+    <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="custom-wide-container py-5">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-4">Tatil Evim</h5>
+                    <p>Hayallerinizdeki tatili gerçeğe dönüştürmek için Ege ve Akdeniz'in en özel villalarını, bungalovlarını ve apartlarını sizlerle buluşturuyoruz.</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-4">Hızlı Erişim</h5>
+                    <a class="btn btn-link text-white-50" href="index.html">Ana Sayfa</a>
+                    <a class="btn btn-link text-white-50" href="about.html">Hakkımızda</a>
+                    <a class="btn btn-link text-white-50" href="villalar.html">Villalar</a>
+                    <a class="btn btn-link text-white-50" href="duyurular.html">Kampanyalar</a>
+                    <a class="btn btn-link text-white-50" href="contact.html">İletişim</a>
+                    <a class="btn btn-link text-white-50" href="admin.html">Yönetim Paneli</a>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-4">İletişim Bilgileri</h5>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Kocaeli Üniversitesi, Teknoloji Fakültesi</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+90 532 000 00 00</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@tatilevim.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="custom-wide-container">
+            <div class="copyright text-center py-4 border-top border-secondary">
+                &copy; <a class="border-bottom" href="index.html">Tatil Evim</a>, Tüm Hakları Saklıdır.
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        function resimYolunuGetir(resimString) {
+            if (!resimString) return 'img/icon-deal.png';
+            if (resimString.startsWith('data:image')) return resimString;
+            return 'img/' + resimString;
+        }
+
+        // --- SCROLL ANIMATION ---
+        function setupScrollReveal() {
+            const reveals = document.querySelectorAll('.wow');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('animated', 'fadeInUp');
+                    }
+                });
+            }, { threshold: 0.1 });
+            reveals.forEach(reveal => observer.observe(reveal));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setupScrollReveal();
+
+            const ilanlar = JSON.parse(localStorage.getItem('ilanlar')) || [];
+            const tumYorumlar = JSON.parse(localStorage.getItem('yorumlar')) || [];
+            const container = document.getElementById('villaListesi');
+            container.innerHTML = "";
+            let sayac = 0;
+
+            ilanlar.reverse().forEach(i => { 
+                // SADECE VILLA TÜRÜNÜ FİLTRELE
+                if(i.tur === 'Villa') { 
+                    sayac++;
+                    
+                    // Dinamik Puan Hesaplama
+                    const buIlaninYorumlari = tumYorumlar.filter(y => y.ilanId == i.id);
+                    let ortalamaPuan = "Yeni";
+                    if (buIlaninYorumlari.length > 0) {
+                        const toplam = buIlaninYorumlari.reduce((acc, curr) => acc + parseInt(curr.puan), 0);
+                        ortalamaPuan = (toplam / buIlaninYorumlari.length).toFixed(1);
+                    }
+
+                    container.innerHTML += `
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="property-item">
+                                <div class="badge-overlay">
+                                    <span class="badge-custom bg-white text-dark"><i class="fa fa-star text-warning"></i> ${ortalamaPuan}</span>
+                                </div>
+                                <a href="ilan-detay.html?id=${i.id}" class="text-decoration-none">
+                                    <div class="card-img-wrap">
+                                        <img src="${resimYolunuGetir(i.resim)}" alt="${i.baslik}">
+                                    </div>
+                                    <div class="card-content">
+                                        <h5 class="listing-title text-truncate">${i.baslik}</h5>
+                                        <div class="listing-features">
+                                            <span class="feature-item"><i class="fa fa-map-marker-alt"></i> ${i.bolge}</span>
+                                            <span class="feature-item"><i class="fa fa-user"></i> ${i.kapasite}</span>
+                                            <span class="feature-item"><i class="fa fa-home"></i> ${i.tur}</span>
+                                        </div>
+                                        <div class="listing-footer">
+                                            <p class="listing-price">${i.fiyat} ₺ <span class="text-muted small fw-normal">/ gece</span></p>
+                                            <button class="btn-detail">İncele <i class="bi bi-arrow-right"></i></button>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>`;
+                }
+            });
+
+            if(sayac === 0) {
+                container.innerHTML = "<div class='col-12 text-center alert alert-warning py-5'><h5>Şu an portföyümüzde müsait villa bulunmamaktadır.</h5><p>Lütfen daha sonra tekrar kontrol ediniz.</p></div>";
+            }
+        });
+    </script>
+</body>
+</html>

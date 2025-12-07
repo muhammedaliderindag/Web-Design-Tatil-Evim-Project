@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>İlan Detayı - Tatil Evim</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="img/favicon.ico" rel="icon">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Flatpickr (Gelişmiş Takvim İçin) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Ana Renkler - Yeni Yeşil Tema */
+            --primary: #00A780;
+            --primary-dark: #008f6d;
+            --secondary: #FF6922;
+            --dark: #06392D;
+            --light: #F0FDF9;
+            --radius: 12px;
+            --card-radius: 20px;
+
+            /* Bootstrap Renklerini Ezmek İçin Değişkenler */
+            --bs-primary: #00A780;
+            --bs-primary-rgb: 0, 167, 128;
+            --bs-link-color: #00A780;
+            --bs-link-hover-color: #008f6d;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #f8f9fa; /* Hafif gri arka plan detay sayfası için iyidir */
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* --- BOOTSTRAP OVERRIDES (MAVİYİ YOK ETMEK İÇİN) --- */
+        .text-primary { color: var(--primary) !important; }
+        .bg-primary { background-color: var(--primary) !important; }
+        .border-primary { border-color: var(--primary) !important; }
+        
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark) !important;
+            border-color: var(--primary-dark) !important;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary) !important;
+            color: #fff !important;
+        }
+
+        /* --- ORTAK GENİŞ KONTEYNER --- */
+        .custom-wide-container {
+            width: 92%;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* 1. NAVBAR */
+/* 1. NAVBAR (GÜNCELLENMİŞ) */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .navbar-brand h1 { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            letter-spacing: -0.5px; 
+            margin: 0; 
+        }
+        
+        /* Navbar Linkleri ve Animasyon */
+        .navbar-nav .nav-link { 
+            color: var(--dark) !important; 
+            font-weight: 600; 
+            font-size: 1rem; 
+            margin-left: 25px; 
+            transition: 0.3s; 
+            position: relative; /* Animasyon için referans noktası */
+        }
+        
+        /* Alt Çizgi Animasyonu (::after) */
+        .navbar-nav .nav-link::after {
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 2px; 
+            bottom: 5px; 
+            left: 0; 
+            background: var(--primary); 
+            transition: 0.3s;
+        }
+        
+        /* Hover ve Active durumunda çizgi uzasın */
+        .navbar-nav .nav-link:hover::after, 
+        .navbar-nav .nav-link.active::after { 
+            width: 100%; 
+        }
+        
+        /* Link üzerine gelince renk değişimi */
+        .navbar-nav .nav-link:hover, 
+        .navbar-nav .nav-link.active { 
+            color: var(--primary) !important; 
+        }
+
+        /* Dropdown Menü Kutusu */
+        .dropdown-menu { 
+            border: none; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+            padding: 15px; 
+            margin-top: 15px; 
+            animation: fadeInUp 0.3s; /* Açılma efekti */
+        }
+
+        /* Dropdown İçindeki Linklerin Renk Ayarı (Maviyi yok etme) */
+        .dropdown-item:active, 
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: var(--primary) !important; /* Yeşil Arkaplan */
+            color: #fff !important; /* Beyaz Yazı */
+        }
+        /* 2. HEADER (GÜNCELLENDİ: About.html ile aynı stil) */
+        .page-header {
+            padding: 120px 0;
+            /* Yeni Tema Gradienti */
+            background: linear-gradient(135deg, var(--dark) 0%, #00A780 100%);
+            color: white;
+            margin-bottom: 50px;
+            border-radius: 0 0 50px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dekoratif Arka Plan Şekilleri */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        /* İçeriğin şekillerin üzerinde kalması için */
+        .page-header .custom-wide-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .breadcrumb-item a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 600; }
+        .breadcrumb-item a:hover { color: #fff; }
+        .breadcrumb-item.active { color: #fff; opacity: 0.7; }
+        .breadcrumb-item + .breadcrumb-item::before { color: rgba(255,255,255,0.5); }
+
+        /* 3. GALERİ & SLIDER */
+        .detail-slider-wrap {
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .carousel-item img {
+            height: 550px;
+            object-fit: cover;
+        }
+        .carousel-control-prev, .carousel-control-next {
+            width: 5%;
+            opacity: 0.8;
+        }
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            padding: 25px;
+            background-size: 40%;
+            border: 2px solid rgba(255,255,255,0.5);
+            transition: 0.3s;
+        }
+        .carousel-control-prev:hover .carousel-control-prev-icon, 
+        .carousel-control-next:hover .carousel-control-next-icon {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* 4. İÇERİK KUTULARI */
+        .content-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            margin-bottom: 30px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+        .feature-card {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+        .feature-card:hover { border-color: var(--primary); background: #fff; }
+        .feature-card i { font-size: 1.5rem; color: var(--primary); margin-bottom: 10px; display: block; }
+        .feature-card span { font-size: 0.9rem; font-weight: 600; color: #555; }
+
+        /* 5. REZERVASYON KARTI (STICKY) */
+        .booking-sidebar {
+            position: sticky;
+            top: 100px; /* Navbar yüksekliği kadar boşluk */
+        }
+        .booking-card {
+            background: #fff;
+            border-radius: var(--card-radius);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+        .booking-header {
+            background: var(--dark);
+            padding: 25px;
+            color: white;
+            text-align: center;
+        }
+        .price-tag { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .price-period { font-size: 0.9rem; opacity: 0.7; font-weight: 400; }
+        
+        .booking-body { padding: 25px; }
+        .form-control-custom {
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            background-color: #fff; /* Flatpickr için önemli */
+        }
+        .form-control-custom:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 167, 128, 0.1); }
+        
+        .summary-box {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px dashed #ccc;
+        }
+        
+        .btn-book {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            padding: 15px;
+            border-radius: 50px;
+            width: 100%;
+            border: none;
+            transition: 0.3s;
+            font-size: 1.1rem;
+        }
+        .btn-book:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 167, 128, 0.3); }
+
+        /* Yorum ve Puanlama Stilleri */
+        .rating-stars {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 5px;
+        }
+        .rating-stars input { display: none; }
+        .rating-stars label {
+            cursor: pointer;
+            font-size: 1.8rem;
+            color: #ccc;
+            transition: color 0.2s;
+        }
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label,
+        .rating-stars input:checked ~ label {
+            color: #ffc107;
+        }
+        .review-item {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .review-avatar {
+            width: 50px; height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+
+        /* Footer */
+        .footer { background-color: var(--dark); margin-top: auto; }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid px-5">
+            <a href="index.html" class="navbar-brand d-flex align-items-center">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 45px; height: 45px;">
+                    <i class="fa fa-umbrella-beach fs-4"></i>
+                </div>
+                <h1 class="m-0 fs-2">Tatil Evim</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto align-items-center">
+                    <a href="index.html" class="nav-item nav-link">Ana Sayfa</a>
+                    <a href="about.html" class="nav-item nav-link">Hakkımızda</a>
+                    <a href="misyon-vizyon.html" class="nav-item nav-link">Misyon</a>
+                    <!-- OK İŞARETİ EKLENDİ -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link" data-bs-toggle="dropdown">Tatil Evlerimiz <i class="fa fa-chevron-down small ms-1"></i></a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="villalar.html" class="dropdown-item">Özel Villalar</a>
+                            <a href="bungalovlar.html" class="dropdown-item">Doğa Bungalovları</a>
+                            <a href="apartlar.html" class="dropdown-item">Apart Daireler</a>
+                        </div>
+                    </div>
+                    <!-- /OK İŞARETİ -->
+                    <a href="duyurular.html" class="nav-item nav-link">Kampanyalar</a>
+                    <a href="contact.html" class="nav-item nav-link">İletişim</a>
+                    <a href="admin.html" class="nav-item nav-link text-danger fw-bold ms-4">Yönetim</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER GÜNCELLENDİ (about.html ile aynı) -->
+    <div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+        <div class="custom-wide-container">
+            <div class="row align-items-center">
+                <div class="col-12 animated slideInLeft">
+                    <h1 class="display-3 fw-bold mb-3">İlan Detayı</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="index.html">Ana Sayfa</a></li>
+                            <li class="breadcrumb-item"><a href="#">İlanlar</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Detaylar</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-wide-container py-5">
+        <div class="row g-5">
+            <div class="col-lg-8" id="ilanIcerik">
+                <div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="booking-sidebar wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="booking-card">
+                        <div class="booking-header">
+                            <h5 class="text-white-50 text-uppercase mb-2 small fw-bold">Gecelik Fiyat</h5>
+                            <div id="fiyatHeader">
+                                <span class="price-tag" id="headerFiyat">0 TL</span>
+                            </div>
+                        </div>
+                        <div class="booking-body">
+                            <form id="rezervasyonForm">
+                                <input type="hidden" id="formIlanId">
+                                <input type="hidden" id="formIlanBaslik">
+                                <input type="hidden" id="formIlanFiyat">
+
+                                <div class="mb-3">
+                                    <label class="fw-bold small mb-1">Giriş - Çıkış Tarihi</label>
+                                    <div class="input-group">
+                                        <!-- Flatpickr ile kontrol edilecek inputlar -->
+                                        <input type="text" class="form-control form-control-custom mb-0 bg-white" id="girisTarihi" placeholder="Giriş Seçin" required>
+                                        <input type="text" class="form-control form-control-custom mb-0 bg-white" id="cikisTarihi" placeholder="Çıkış Seçin" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="fw-bold small mb-1">Misafir Sayısı</label>
+                                    <select class="form-select form-control-custom" id="kisiSayisi">
+                                        <option value="1">1 Misafir</option>
+                                        <option value="2">2 Misafir</option>
+                                        <option value="3">3 Misafir</option>
+                                        <option value="4">4 Misafir</option>
+                                        <option value="5+">5+ Misafir</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="fw-bold small mb-1">Kişisel Bilgiler</label>
+                                    <input type="text" class="form-control form-control-custom" id="musteriAd" placeholder="Adınız Soyadınız" required>
+                                    <input type="tel" class="form-control form-control-custom" id="musteriTel" placeholder="Telefon Numaranız" required>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="fw-bold small mb-1">İndirim Kuponu</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-custom mb-0" id="girilenKupon" placeholder="KOD" style="text-transform:uppercase;">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="kuponUygula()">Uygula</button>
+                                    </div>
+                                    <div id="kuponMesaj" class="form-text small mt-1"></div>
+                                </div>
+
+                                <div id="fiyatBilgilendirme" class="summary-box d-none">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span><span id="gunSayisiGoster">0</span> Gece x <span id="birimFiyatGoster">0</span></span>
+                                        <span class="fw-bold" id="hamTutarGoster">0 TL</span>
+                                    </div>
+                                    <div id="indirimSatiri" class="d-flex justify-content-between mb-2 text-success d-none">
+                                        <span>Kupon İndirimi</span>
+                                        <span class="fw-bold" id="indirimTutariGoster">-0 TL</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between border-top pt-2 mt-2 align-items-center">
+                                        <span class="fw-bold text-dark">TOPLAM</span>
+                                        <span class="fs-4 fw-bold text-primary" id="toplamTutarGoster">0 TL</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn-book">Rezervasyon Yap</button>
+                                <p class="text-center text-muted small mt-3 mb-0"><i class="fa fa-lock me-1"></i> Ödeme güvenli alınır</p>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded p-4 mt-4 shadow-sm text-center">
+                        <i class="fa fa-headset fa-3x text-primary mb-3"></i>
+                        <h5>Yardıma mı ihtiyacınız var?</h5>
+                        <p class="text-muted small">Rezervasyonla ilgili sorularınız için bize ulaşın.</p>
+                        <a href="tel:+905320000000" class="btn btn-outline-dark rounded-pill px-4">Bizi Arayın</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="custom-wide-container py-5">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-4">Tatil Evim</h5>
+                    <p>Hayallerinizdeki tatili gerçeğe dönüştürmek için Ege ve Akdeniz'in en özel villalarını, bungalovlarını ve apartlarını sizlerle buluşturuyoruz.</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-4">Hızlı Erişim</h5>
+                    <a class="btn btn-link text-white-50" href="index.html">Ana Sayfa</a>
+                    <a class="btn btn-link text-white-50" href="about.html">Hakkımızda</a>
+                    <a class="btn btn-link text-white-50" href="villalar.html">Villalar</a>
+                    <a class="btn btn-link text-white-50" href="duyurular.html">Kampanyalar</a>
+                    <a class="btn btn-link text-white-50" href="contact.html">İletişim</a>
+                    <a class="btn btn-link text-white-50" href="admin.html">Yönetim Paneli</a>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-4">İletişim Bilgileri</h5>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Kocaeli Üniversitesi, Teknoloji Fakültesi</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+90 532 000 00 00</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@tatilevim.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="custom-wide-container">
+            <div class="copyright text-center py-4 border-top border-secondary">
+                &copy; <a class="border-bottom" href="index.html">Tatil Evim</a>, Tüm Hakları Saklıdır.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        let aktifKupon = null;
+        let ilanIdGlobal = null;
+
+        function resimYolunuGetir(resimString) {
+            if (!resimString) return 'img/icon-deal.png';
+            if (resimString.startsWith('data:image')) return resimString;
+            return 'img/' + resimString;
+        }
+
+        // --- ÖZELLİK KUTUCUĞU OLUŞTURUCU ---
+        const createFeatureBox = (active, icon, title) => {
+            const opacity = active ? '1' : '0.4';
+            const iconColor = active ? 'text-primary' : 'text-muted';
+            const check = active ? '<i class="fa fa-check-circle position-absolute top-0 end-0 m-2 text-success small"></i>' : '';
+            return `
+                <div class="feature-card position-relative" style="opacity: ${opacity}">
+                    ${check}
+                    <i class="fa ${icon} ${iconColor}"></i>
+                    <span>${title}</span>
+                </div>
+            `;
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ilanId = new URLSearchParams(window.location.search).get('id');
+            ilanIdGlobal = ilanId;
+            const ilanlar = JSON.parse(localStorage.getItem('ilanlar')) || [];
+            const ilan = ilanlar.find(i => i.id == ilanId);
+
+            if(!ilan) {
+                document.getElementById('ilanIcerik').innerHTML = "<div class='alert alert-danger p-5 text-center rounded-3'><h5>İlan Bulunamadı</h5><p>Aradığınız ilan yayından kaldırılmış olabilir.</p><a href='index.html' class='btn btn-dark mt-3'>Ana Sayfaya Dön</a></div>";
+                document.querySelector('.booking-sidebar').style.display = 'none';
+                return;
+            }
+
+            // 1. SLIDER İÇERİĞİ
+            let sliderContent = '';
+            if (ilan.resimler && ilan.resimler.length > 0) {
+                ilan.resimler.forEach((img, index) => {
+                    const activeClass = index === 0 ? 'active' : '';
+                    sliderContent += `<div class="carousel-item ${activeClass}"><img src="${resimYolunuGetir(img)}" class="d-block w-100" alt="Resim"></div>`;
+                });
+            } else {
+                sliderContent = `<div class="carousel-item active"><img src="${resimYolunuGetir(ilan.resim)}" class="d-block w-100" alt="Resim"></div>`;
+            }
+
+            // 2. İÇERİĞİ DOM'A BASMA
+            document.getElementById('ilanIcerik').innerHTML = `
+                <div class="detail-slider-wrap wow fadeIn">
+                    <div id="ilanSlider" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">${sliderContent}</div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#ilanSlider" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#ilanSlider" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+                    </div>
+                    <div class="bg-primary text-white position-absolute top-0 start-0 m-4 py-2 px-4 rounded-pill fw-bold shadow">${ilan.tur}</div>
+                </div>
+
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4 wow fadeInUp">
+                    <div>
+                        <h1 class="mb-2 fw-bold text-dark">${ilan.baslik}</h1>
+                        <p class="text-muted fs-5 mb-0"><i class="fa fa-map-marker-alt text-primary me-2"></i>${ilan.bolge}</p>
+                    </div>
+                    <div class="mt-3 mt-md-0 text-md-end" id="ratingContainer">
+                        <!-- Dinamik Puanlama Buraya Gelecek -->
+                        <div class="text-warning mb-1"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></div>
+                        <small class="text-muted">(Yeni İlan)</small>
+                    </div>
+                </div>
+
+                <div class="content-box wow fadeInUp">
+                    <div class="row text-center divide-cols">
+                        <div class="col-4 border-end">
+                            <i class="fa fa-users fa-2x text-primary mb-2"></i>
+                            <h6 class="fw-bold mb-0">${ilan.kapasite} Kişi</h6>
+                            <small class="text-muted">Kapasite</small>
+                        </div>
+                        <div class="col-4 border-end">
+                            <i class="fa fa-bed fa-2x text-primary mb-2"></i>
+                            <h6 class="fw-bold mb-0">${ilan.yatak || 2} Yatak</h6>
+                            <small class="text-muted">Oda Sayısı</small>
+                        </div>
+                        <div class="col-4">
+                            <i class="fa fa-bath fa-2x text-primary mb-2"></i>
+                            <h6 class="fw-bold mb-0">${ilan.banyo || 1} Banyo</h6>
+                            <small class="text-muted">Banyo Sayısı</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-box wow fadeInUp">
+                    <h4 class="fw-bold mb-4 border-bottom pb-2">İlan Açıklaması</h4>
+                    <p class="text-muted mb-0" style="line-height: 1.8; white-space: pre-wrap;">${ilan.aciklama || 'Bu özel tatil evi için henüz detaylı bir açıklama eklenmemiştir. Ancak fotoğraflardan kalitesini görebilirsiniz.'}</p>
+                </div>
+
+                <div class="content-box wow fadeInUp">
+                    <h4 class="fw-bold mb-4 border-bottom pb-2">Sunulan İmkanlar</h4>
+                    <div class="feature-grid">
+                        ${createFeatureBox(ilan.ozellikler?.wifi, 'fa-wifi', 'Wifi')}
+                        ${createFeatureBox(ilan.ozellikler?.klima, 'fa-snowflake', 'Klima')}
+                        ${createFeatureBox(ilan.ozellikler?.havuz, 'fa-swimming-pool', 'Havuz')}
+                        ${createFeatureBox(true, 'fa-tv', 'TV')}
+                        ${createFeatureBox(true, 'fa-parking', 'Otopark')}
+                        ${createFeatureBox(true, 'fa-utensils', 'Mutfak')}
+                    </div>
+                </div>
+                
+                <div class="content-box wow fadeInUp">
+                    <h4 class="fw-bold mb-4 border-bottom pb-2">Konum</h4>
+                    <div class="rounded overflow-hidden" style="height: 350px;">
+                        <iframe width="100%" height="100%" frameborder="0" style="border:0" 
+                            src="https://maps.google.com/maps?q=${encodeURIComponent(ilan.bolge + ', Türkiye')}&t=&z=13&ie=UTF8&iwloc=&output=embed" allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- YENİ YORUM BÖLÜMÜ -->
+                <div class="content-box wow fadeInUp">
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
+                        <h4 class="fw-bold m-0">Değerlendirmeler & Yorumlar</h4>
+                        <span class="badge bg-light text-primary border" id="toplamYorumSayisiBadge">0 Yorum</span>
+                    </div>
+
+                    <div id="yorumListesi" class="mb-5">
+                        <!-- Yorumlar JS ile buraya yüklenecek -->
+                        <div class="text-center text-muted py-3">Henüz yorum yapılmamış. İlk yorumu siz yapın!</div>
+                    </div>
+
+                    <h5 class="mb-4 fw-bold">Deneyiminizi Paylaşın</h5>
+                    <form id="yorumForm" class="bg-light p-4 rounded-3 border">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small">Puanınız</label>
+                            <div class="rating-stars">
+                                <input type="radio" name="rating" id="star5" value="5"><label for="star5" title="Mükemmel">★</label>
+                                <input type="radio" name="rating" id="star4" value="4"><label for="star4" title="Çok İyi">★</label>
+                                <input type="radio" name="rating" id="star3" value="3"><label for="star3" title="İyi">★</label>
+                                <input type="radio" name="rating" id="star2" value="2"><label for="star2" title="Orta">★</label>
+                                <input type="radio" name="rating" id="star1" value="1"><label for="star1" title="Kötü">★</label>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="yrmAd" placeholder="Adınız" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="yrmSoyad" placeholder="Soyadınız" required>
+                            </div>
+                            <div class="col-12">
+                                <input type="email" class="form-control" id="yrmEmail" placeholder="E-posta Adresiniz" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" id="yrmMesaj" rows="3" placeholder="Yorumunuzu buraya yazın..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100">Yorumu Gönder</button>
+                    </form>
+                </div>
+            `;
+
+            // Form Verilerini Doldur
+            document.getElementById('headerFiyat').innerText = ilan.fiyat + " TL";
+            document.getElementById('formIlanId').value = ilan.id;
+            document.getElementById('formIlanBaslik').value = ilan.baslik;
+            document.getElementById('formIlanFiyat').value = ilan.fiyat;
+
+            // Yorumları ve Takvimi Başlat
+            yorumListele(ilanId);
+            setupFlatpickr(ilanId);
+        });
+
+        // --- YORUM SİSTEMİ ---
+        function yorumListele(id) {
+            const tümYorumlar = JSON.parse(localStorage.getItem('yorumlar')) || [];
+            const buIlaninYorumlari = tümYorumlar.filter(y => y.ilanId == id).reverse();
+            const container = document.getElementById('yorumListesi');
+            
+            // Puan Ortalaması Hesapla
+            if(buIlaninYorumlari.length > 0) {
+                const toplamPuan = buIlaninYorumlari.reduce((acc, cur) => acc + parseInt(cur.puan), 0);
+                const ortalama = (toplamPuan / buIlaninYorumlari.length).toFixed(1);
+                
+                // Headerdaki statik alanı güncelle
+                let starsHTML = '';
+                for(let i=1; i<=5; i++) {
+                    if(i <= Math.round(ortalama)) starsHTML += '<i class="fa fa-star text-warning"></i>';
+                    else starsHTML += '<i class="fa fa-star text-muted"></i>';
+                }
+                document.getElementById('ratingContainer').innerHTML = `
+                    <div class="text-warning mb-1">${starsHTML}</div>
+                    <small class="text-muted fw-bold fs-6">(${ortalama} / ${buIlaninYorumlari.length} Değerlendirme)</small>
+                `;
+                document.getElementById('toplamYorumSayisiBadge').innerText = `${buIlaninYorumlari.length} Yorum`;
+
+                // Yorumları Listele
+                let html = '';
+                buIlaninYorumlari.forEach(y => {
+                    let yildizlar = '';
+                    for(let i=0; i<y.puan; i++) yildizlar += '<i class="fa fa-star text-warning small"></i>';
+                    
+                    html += `
+                        <div class="review-item wow fadeInUp">
+                            <div class="d-flex">
+                                <div class="review-avatar">${y.adSoyad.charAt(0)}</div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">${y.adSoyad}</h6>
+                                    <div class="mb-1">${yildizlar} <small class="text-muted ms-2">${y.tarih}</small></div>
+                                    <p class="text-muted mb-0">${y.yorum}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } else {
+                document.getElementById('ratingContainer').innerHTML = `<div class="text-muted mb-1"><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></div><small class="text-muted">(Henüz Değerlendirilmedi)</small>`;
+            }
+        }
+
+        document.addEventListener('submit', function(e) {
+            if(e.target && e.target.id === 'yorumForm') {
+                e.preventDefault();
+                const puanEl = document.querySelector('input[name="rating"]:checked');
+                if(!puanEl) { Swal.fire('Hata', 'Lütfen puan veriniz.', 'warning'); return; }
+
+                const yeniYorum = {
+                    id: Date.now(),
+                    ilanId: ilanIdGlobal,
+                    adSoyad: document.getElementById('yrmAd').value + ' ' + document.getElementById('yrmSoyad').value,
+                    email: document.getElementById('yrmEmail').value,
+                    yorum: document.getElementById('yrmMesaj').value,
+                    puan: puanEl.value,
+                    tarih: new Date().toLocaleDateString('tr-TR')
+                };
+
+                let yorumlar = JSON.parse(localStorage.getItem('yorumlar')) || [];
+                yorumlar.push(yeniYorum);
+                localStorage.setItem('yorumlar', JSON.stringify(yorumlar));
+
+                Swal.fire('Teşekkürler', 'Yorumunuz başarıyla kaydedildi.', 'success');
+                e.target.reset();
+                yorumListele(ilanIdGlobal);
+            }
+        });
+
+        // --- TAKVİM AYARLARI (DOLU TARİHLERİ ENGELLEME) ---
+        function setupFlatpickr(id) {
+            const rezervasyonlar = JSON.parse(localStorage.getItem('rezervasyonlar')) || [];
+            
+            // Sadece bu ilana ait ve iptal edilmemiş rezervasyonları al
+            const doluTarihler = rezervasyonlar
+                .filter(r => r.ilanId == id && r.durum !== 'İptal')
+                .map(r => {
+                    return {
+                        from: r.giris,
+                        to: r.cikis
+                    };
+                });
+
+            // Türkçe Dil Desteği ile Flatpickr Başlat
+            flatpickr("#girisTarihi", {
+                locale: "tr",
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                disable: doluTarihler,
+                onChange: function(selectedDates, dateStr, instance) {
+                    fiyatHesapla();
+                    // Çıkış tarihi için minDate ayarla
+                    if (selectedDates[0]) {
+                        cikisPicker.set('minDate', selectedDates[0].fp_incr(1));
+                    }
+                }
+            });
+
+            const cikisPicker = flatpickr("#cikisTarihi", {
+                locale: "tr",
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                disable: doluTarihler,
+                onChange: function(selectedDates, dateStr, instance) {
+                    fiyatHesapla();
+                }
+            });
+        }
+
+        // --- HESAPLAMA & KUPON FONKSİYONLARI ---
+        function kuponUygula() {
+            const kod = document.getElementById('girilenKupon').value.toUpperCase().trim();
+            const msg = document.getElementById('kuponMesaj');
+            const giris = document.getElementById('girisTarihi').value;
+            const cikis = document.getElementById('cikisTarihi').value;
+
+            if(!giris || !cikis) { msg.innerHTML = "<span class='text-danger'>* Önce tarih seçiniz.</span>"; return; }
+
+            const kuponlar = JSON.parse(localStorage.getItem('kuponlar')) || [];
+            const kupon = kuponlar.find(k => k.kod === kod);
+
+            if(!kupon) { msg.innerHTML = "<span class='text-danger'>Geçersiz kupon kodu.</span>"; aktifKupon = null; fiyatHesapla(); return; }
+            if(kupon.kullanilan >= kupon.limit) { msg.innerHTML = "<span class='text-danger'>Bu kuponun limiti dolmuş.</span>"; aktifKupon = null; fiyatHesapla(); return; }
+
+            const gun = Math.ceil((new Date(cikis) - new Date(giris)) / (1000 * 60 * 60 * 24));
+            if(gun < kupon.minGun) { msg.innerHTML = `<span class='text-danger'>Minimum ${kupon.minGun} gece gerekli.</span>`; aktifKupon = null; fiyatHesapla(); return; }
+
+            aktifKupon = kupon;
+            msg.innerHTML = `<span class='text-success fw-bold'><i class='fa fa-check'></i> İndirim tanımlandı!</span>`;
+            fiyatHesapla();
+        }
+
+        function fiyatHesapla() {
+            const giris = document.getElementById('girisTarihi').value;
+            const cikis = document.getElementById('cikisTarihi').value;
+            const birim = parseFloat(document.getElementById('formIlanFiyat').value.replace(/\./g, ''));
+            const box = document.getElementById('fiyatBilgilendirme');
+
+            if(giris && cikis) {
+                const d1 = new Date(giris); const d2 = new Date(cikis);
+                if(d2 > d1) {
+                    const gun = Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24));
+                    let toplam = gun * birim;
+                    let indirim = 0;
+
+                    if(aktifKupon) {
+                        if(gun < aktifKupon.minGun) {
+                            document.getElementById('kuponMesaj').innerText = "Kupon şartları sağlanmıyor."; aktifKupon=null;
+                        } else {
+                            indirim = aktifKupon.tur === 'yuzde' ? (toplam * aktifKupon.deger) / 100 : aktifKupon.deger;
+                            if(indirim > toplam) indirim = toplam;
+                            toplam -= indirim;
+                            document.getElementById('indirimSatiri').classList.remove('d-none');
+                            document.getElementById('indirimTutariGoster').innerText = `-${indirim.toLocaleString('tr-TR')} TL`;
+                        }
+                    } else { document.getElementById('indirimSatiri').classList.add('d-none'); }
+
+                    document.getElementById('gunSayisiGoster').innerText = gun;
+                    document.getElementById('birimFiyatGoster').innerText = birim.toLocaleString('tr-TR') + " TL";
+                    document.getElementById('hamTutarGoster').innerText = (gun * birim).toLocaleString('tr-TR') + " TL";
+                    document.getElementById('toplamTutarGoster').innerText = toplam.toLocaleString('tr-TR') + " TL";
+                    box.classList.remove('d-none');
+                } else { box.classList.add('d-none'); }
+            }
+        }
+
+        document.getElementById('rezervasyonForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const toplamTxt = document.getElementById('toplamTutarGoster').innerText;
+            const tutar = parseFloat(toplamTxt.replace(' TL', '').replace(/\./g, ''));
+            let indirimMiktari = 0;
+            
+            if(aktifKupon && !document.getElementById('indirimSatiri').classList.contains('d-none')) {
+                indirimMiktari = parseFloat(document.getElementById('indirimTutariGoster').innerText.replace('-', '').replace(' TL', '').replace(/\./g, ''));
+            }
+
+            const r = {
+                id: Date.now(),
+                ilanId: document.getElementById('formIlanId').value,
+                ilanBaslik: document.getElementById('formIlanBaslik').value,
+                birimFiyat: parseFloat(document.getElementById('formIlanFiyat').value),
+                musteriAd: document.getElementById('musteriAd').value,
+                musteriTel: document.getElementById('musteriTel').value,
+                giris: document.getElementById('girisTarihi').value,
+                cikis: document.getElementById('cikisTarihi').value,
+                odenecekTutar: tutar || 0,
+                indirimMiktari: indirimMiktari,
+                kuponKodu: aktifKupon ? aktifKupon.kod : "-",
+                durum: 'Beklemede',
+                tarih: new Date().toLocaleDateString('tr-TR')
+            };
+
+            let rs = JSON.parse(localStorage.getItem('rezervasyonlar')) || []; 
+            rs.push(r); 
+            localStorage.setItem('rezervasyonlar', JSON.stringify(rs));
+            
+            if(aktifKupon) { 
+                let ks = JSON.parse(localStorage.getItem('kuponlar')) || []; 
+                const kIdx = ks.findIndex(x => x.kod === aktifKupon.kod); 
+                if(kIdx > -1) { ks[kIdx].kullanilan++; localStorage.setItem('kuponlar', JSON.stringify(ks)); }
+            }
+
+            Swal.fire({
+                icon: 'success', 
+                title: 'Rezervasyon Alındı!', 
+                text: 'Sizinle en kısa sürede iletişime geçeceğiz.', 
+                confirmButtonColor: '#00A780', // Yeni Yeşil Renk
+                confirmButtonText: 'Tamam'
+            }).then(() => { window.location.href = 'index.html'; });
+        });
+    </script>
+</body>
+</html>
